@@ -25,9 +25,24 @@ function moveLines () {
     item.style.top = item.y + 'px'
   })
 }
-function moveEnemy () {
+
+function isCollide (a, b) {
+  let aRect = a.getBoundingClientRect()
+  let bRect = b.getBoundingClientRect()
+  return !(
+    aRect.bottom < bRect.top ||
+    aRect.top > bRect.bottom ||
+    aRect.right < bRect.left ||
+    aRect.left > bRect.right
+  )
+}
+
+function moveEnemy (car) {
   let ele = document.querySelectorAll('.enemy')
   ele.forEach(function (item) {
+    if (isCollide(car, item)) {
+      console.log('HIT')
+    }
     if (item.y >= 1500) {
       item.y = -600
       item.style.left = Math.floor(Math.random() * 150) + 'px'
@@ -39,7 +54,7 @@ function moveEnemy () {
 function playGame () {
   let car = document.querySelector('.car')
   moveLines()
-  moveEnemy()
+  moveEnemy(car)
   let road = gameArea.getBoundingClientRect()
   if (player.start) {
     if (keys.ArrowUp && player.y > road.top) {
