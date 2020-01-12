@@ -2,7 +2,8 @@ const score = document.querySelector('.score')
 const startScreen = document.querySelector('.startScreen')
 const gameArea = document.querySelector('.gameArea')
 let player = {
-  speed: 5
+  speed: 5,
+  score: 0
 }
 let keys = {
   ArrowUp: false,
@@ -42,6 +43,7 @@ function moveEnemy (car) {
   ele.forEach(function (item) {
     if (isCollide(car, item)) {
       console.log('HIT')
+      endGame()
     }
     if (item.y >= 1500) {
       item.y = -600
@@ -72,6 +74,8 @@ function playGame () {
     car.style.left = player.x + 'px'
     car.style.top = player.y + 'px'
     window.requestAnimationFrame(playGame)
+    player.score++
+    score.innerText = 'Score: ' + player.score
   }
 }
 
@@ -86,11 +90,17 @@ function pressOff (e) {
   keys[e.key] = false
   console.log(keys)
 }
+function endGame () {
+  player.start = false
+  score.innerHTML = 'Game Over<br>Score was ' + player.score
+  startScreen.classList.remove('hide')
+}
 
 function start () {
   startScreen.classList.add('hide')
   gameArea.classList.remove('hide')
   player.start = true
+  player.score = 0
   for (let x = 0; x < 10; x++) {
     let div = document.createElement('div')
     div.classList.add('line')
