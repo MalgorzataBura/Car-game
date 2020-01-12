@@ -18,7 +18,6 @@ document.addEventListener('keyup', pressOff)
 function moveLines () {
   let lines = document.querySelectorAll('.line')
   lines.forEach(function (item) {
-    console.log(item.y)
     if (item.y >= 1500) {
       item.y -= 1500
     }
@@ -48,11 +47,13 @@ function moveEnemy (car) {
     if (item.y >= 1500) {
       item.y = -600
       item.style.left = Math.floor(Math.random() * 150) + 'px'
+      item.style.backgroundColor = randomColor()
     }
     item.y += player.speed
     item.style.top = item.y + 'px'
   })
 }
+
 function playGame () {
   let car = document.querySelector('.car')
   moveLines()
@@ -90,6 +91,7 @@ function pressOff (e) {
   keys[e.key] = false
   console.log(keys)
 }
+
 function endGame () {
   player.start = false
   score.innerHTML = 'Game Over<br>Score was ' + player.score
@@ -99,6 +101,7 @@ function endGame () {
 function start () {
   startScreen.classList.add('hide')
   gameArea.classList.remove('hide')
+  gameArea.innerHTML = ''
   player.start = true
   player.score = 0
   for (let x = 0; x < 10; x++) {
@@ -110,7 +113,7 @@ function start () {
   }
   window.requestAnimationFrame(playGame)
   let car = document.createElement('div')
-  car.innerText = 'Car'
+  //car.innerText = "Car";
   car.setAttribute('class', 'car')
   gameArea.appendChild(car)
   player.x = car.offsetLeft
@@ -118,10 +121,19 @@ function start () {
   for (let x = 0; x < 3; x++) {
     let enemy = document.createElement('div')
     enemy.classList.add('enemy')
+    enemy.innerHTML = '<br>' + (x + 1)
     enemy.y = (x + 1) * 600 * -1
     enemy.style.top = enemy.y + 'px'
     enemy.style.left = Math.floor(Math.random() * 150) + 'px'
-    enemy.style.backgroundColor = 'red'
+    enemy.style.backgroundColor = randomColor()
     gameArea.appendChild(enemy)
   }
+}
+
+function randomColor () {
+  function c () {
+    let hex = Math.floor(Math.random() * 256).toString(16)
+    return ('0' + String(hex)).substr(-2)
+  }
+  return '#' + c() + c() + c()
 }
